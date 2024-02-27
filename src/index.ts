@@ -11,7 +11,7 @@ const appDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   logging: true,
   synchronize: true,
-  ssl: { rejectUnauthorized: false },
+  ssl: { ca: process.env.RDS_CA },
 });
 
 const main = async () => {
