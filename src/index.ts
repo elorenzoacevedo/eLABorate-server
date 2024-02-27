@@ -12,7 +12,7 @@ const appDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   logging: true,
   synchronize: true,
-  ssl: { ca: fs.readFileSync('../rds-ca-ssl.pem') },
+  ssl: { ca: fs.readFileSync('/home/ec2-user/elaborate-server/rds-ca-ssl.pem') },
 });
 
 const main = async () => {
