@@ -11,6 +11,7 @@ const appDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   logging: true,
   synchronize: true,
+  ssl: true
 });
 
 const main = async () => {
