@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { DataSource } from 'typeorm';
 import express from 'express';
 import cors from 'cors';
-const ca = require('../rds-ca-ssl.pem')
+import fs from 'fs';
 
 const appDataSource = new DataSource({
   type: 'postgres',
@@ -12,7 +12,7 @@ const appDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   logging: true,
   synchronize: true,
-  ssl: { ca },
+  ssl: { ca: fs.readFileSync('../rds-ca-ssl.pem') },
 });
 
 const main = async () => {
