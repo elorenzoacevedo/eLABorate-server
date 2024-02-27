@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm';
 import express from 'express';
 import cors from 'cors';
 import fs from 'fs';
+import { createServer } from 'http';
 
 const appDataSource = new DataSource({
   type: 'postgres',
@@ -12,7 +13,9 @@ const appDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   logging: true,
   synchronize: true,
-  ssl: { ca: fs.readFileSync('/home/ec2-user/elaborate-server/rds-ca-ssl.pem') },
+  ssl: {
+    ca: fs.readFileSync('/home/ec2-user/elaborate-server/rds-ca-ssl.pem'),
+  },
 });
 
 const main = async () => {
@@ -26,8 +29,9 @@ const main = async () => {
     res.send('Hello World!');
   });
 
-  app.listen(process.env.PORT, () => {
-    console.log(`Server running on port ${process.env.PORT}...`);
+  const httpServer = createServer(app);
+  httpServer.listen(80, () => {
+    console.log(`Server running on port 80...`);
   });
 };
 
