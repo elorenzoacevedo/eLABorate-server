@@ -4,6 +4,10 @@ import express from 'express';
 import cors from 'cors';
 import fs from 'fs';
 import { createServer } from 'http';
+import { User } from './entity/User';
+import { Post } from './entity/Post';
+import { Lab } from './entity/Lab';
+import { Deletion } from './entity/Deletion';
 
 const appDataSource = new DataSource({
   type: 'postgres',
@@ -13,8 +17,9 @@ const appDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   logging: true,
   synchronize: true,
+  entities: [User, Post, Lab, Deletion],
   ssl: {
-    ca: fs.readFileSync('/home/ec2-user/elaborate-server/rds-ca-ssl.pem'),
+    ca: fs.readFileSync(process.env.RDS_CA_LOCATION as string),
   },
 });
 
@@ -30,8 +35,8 @@ const main = async () => {
   });
 
   const httpServer = createServer(app);
-  httpServer.listen(80, () => {
-    console.log(`Server running on port 80...`);
+  httpServer.listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}...`);
   });
 };
 
