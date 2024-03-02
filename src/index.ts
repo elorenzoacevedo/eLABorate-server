@@ -19,9 +19,12 @@ const appDataSource = new DataSource({
   logging: true,
   synchronize: true,
   entities: [User, Post, Lab, Deletion],
-  // ssl: {
-  //   ca: fs.readFileSync(process.env.RDS_CA_LOCATION as string),
-  // },
+  ssl:
+    process.env.RDS_CA_LOCATION === undefined
+      ? false
+      : {
+          ca: fs.readFileSync(process.env.RDS_CA_LOCATION as string),
+        },
 });
 
 const main = async () => {
