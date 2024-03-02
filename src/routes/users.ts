@@ -8,6 +8,7 @@ usersRouter.post('/create', userController.create);
 
 //Update
 usersRouter.post('/update', userController.update);
+usersRouter.post('/enroll', userController.enroll);
 
 //Delete
 usersRouter.delete('/delete/:id', userController.remove);

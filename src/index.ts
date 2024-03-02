@@ -9,6 +9,7 @@ import { Post } from './entity/Post';
 import { Lab } from './entity/Lab';
 import { Deletion } from './entity/Deletion';
 import usersRouter from './routes/users';
+import labsRouter from './routes/labs';
 
 const appDataSource = new DataSource({
   type: 'postgres',
@@ -39,6 +40,7 @@ const main = async () => {
   });
 
   app.use('/users', usersRouter);
+  app.use('/labs', labsRouter);
 
   const httpServer = createServer(app);
   httpServer.listen(process.env.PORT, () => {

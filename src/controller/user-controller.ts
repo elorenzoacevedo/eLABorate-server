@@ -1,6 +1,7 @@
 import expressAsyncHandler from 'express-async-handler';
 import { User } from '../entity/User';
-import { IUser, UserFilters } from '../lib/types';
+import { EnrollArgs, IUser, UserFilters } from '../lib/types';
+import { Lab } from '../entity/Lab';
 const encryptly = require('encryptly');
 
 const create = expressAsyncHandler(async (req, res) => {
@@ -72,7 +73,10 @@ const remove = expressAsyncHandler(async (req, res) => {
 
 const getAll = expressAsyncHandler(async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find({
+      relations: { lab: true },
+      select: { lab: { name: true } },
+    });
     res.json(users);
   } catch (error) {
     res.status(500).json(error);
@@ -92,6 +96,8 @@ const filter = expressAsyncHandler(async (req, res) => {
       labName,
     } = req.body as UserFilters;
     const users = await User.find({
+      relations: { lab: true },
+      select: { lab: { name: true } },
       where: {
         pantherId,
         username,
@@ -109,12 +115,33 @@ const filter = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const enroll = expressAsyncHandler(async (req, res) => {
+  const { pantherId, labName } = req.body as EnrollArgs;
+  const errors: string[] = [];
+  try {
+    const user = await User.findOneBy({ pantherId });
+    const lab = await Lab.findOneBy({ name: labName });
+    if (!user) errors.push('User does not exist');
+    if (!lab) errors.push('Lab does not exist');
+    if (errors.length !== 0) {
+      res.status(400).json(errors);
+      return;
+    }
+    (user as User).lab = lab as Lab;
+    await User.update({ pantherId }, user as User);
+    res.json({ message: `User [${pantherId}] enrolled to lab [${labName}]` });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 const userController = {
   create,
   update,
   remove,
   getAll,
-  filter
+  filter,
+  enroll,
 };
 
 export default userController;

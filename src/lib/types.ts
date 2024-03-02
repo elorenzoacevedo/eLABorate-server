@@ -19,3 +19,20 @@ export interface UserFilters {
   role?: string;
   labName?: string;
 }
+
+interface DateRange {
+  start: Date;
+  end: Date;
+}
+
+export interface LabFilters {
+  name?: string;
+  startDate?: DateRange;
+  endDate?: DateRange;
+  course?: string;
+}
+
+export interface EnrollArgs {
+  pantherId: string;
+  labName: string;
+}
