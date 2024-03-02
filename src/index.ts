@@ -8,6 +8,7 @@ import { User } from './entity/User';
 import { Post } from './entity/Post';
 import { Lab } from './entity/Lab';
 import { Deletion } from './entity/Deletion';
+import usersRouter from './routes/users';
 
 const appDataSource = new DataSource({
   type: 'postgres',
@@ -18,9 +19,12 @@ const appDataSource = new DataSource({
   logging: true,
   synchronize: true,
   entities: [User, Post, Lab, Deletion],
-  ssl: {
-    ca: fs.readFileSync(process.env.RDS_CA_LOCATION as string),
-  },
+  ssl:
+    process.env.RDS_CA_LOCATION === undefined
+      ? false
+      : {
+          ca: fs.readFileSync(process.env.RDS_CA_LOCATION as string),
+        },
 });
 
 const main = async () => {
@@ -33,6 +37,8 @@ const main = async () => {
   app.get('/', (req, res) => {
     res.send('Hello World!');
   });
+
+  app.use('/users', usersRouter);
 
   const httpServer = createServer(app);
   httpServer.listen(process.env.PORT, () => {
