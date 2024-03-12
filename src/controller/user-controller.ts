@@ -1,6 +1,6 @@
 import expressAsyncHandler from 'express-async-handler';
 import { User } from '../entity/User';
-import { EnrollArgs, IUser, UserFilters } from '../lib/types';
+import { EnrollArgs, IUser, UserCredentials, UserFilters } from '../lib/types';
 import { Lab } from '../entity/Lab';
 const encryptly = require('encryptly');
 
@@ -135,6 +135,22 @@ const enroll = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const login = expressAsyncHandler(async (req, res) => {
+  try {
+    const { username, password } = req.body as UserCredentials;
+    const user = await User.findOneBy({ username });
+    if (!user) {
+      res.status(400).json({ message: 'User does not exist' });
+      return;
+    }
+    const login =
+      password === encryptly.decrypt(user.password, process.env.ENCRYPTION_KEY);
+    res.json({ login });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 const userController = {
   create,
   update,
@@ -142,6 +158,7 @@ const userController = {
   getAll,
   filter,
   enroll,
+  login,
 };
 
 export default userController;

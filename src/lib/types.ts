@@ -36,3 +36,8 @@ export interface EnrollArgs {
   pantherId: string;
   labName: string;
 }
+
+export interface UserCredentials {
+  username: string;
+  password: string;
+}
