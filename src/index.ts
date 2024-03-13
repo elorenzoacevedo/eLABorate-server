@@ -10,7 +10,8 @@ import { Lab } from './entity/Lab';
 import { Deletion } from './entity/Deletion';
 import usersRouter from './routes/users';
 import labsRouter from './routes/labs';
-
+import postsRouter from './routes/posts';
+import deletionsRouter from './routes/deletions';
 const appDataSource = new DataSource({
   type: 'postgres',
   host: process.env.DB_HOST,
@@ -41,6 +42,8 @@ const main = async () => {
 
   app.use('/users', usersRouter);
   app.use('/labs', labsRouter);
+  app.use('/posts', postsRouter);
+  app.use('/deletions', deletionsRouter);
 
   const httpServer = createServer(app);
   httpServer.listen(process.env.PORT, () => {
