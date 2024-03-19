@@ -32,7 +32,7 @@ const appDataSource = new DataSource({
 const main = async () => {
   appDataSource.initialize();
   const app = express();
-  app.use(cors());
+  app.use(cors({ origin: '*' }));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
