@@ -14,6 +14,6 @@ labsRouter.delete('/delete/:id', labController.remove);
 
 //Read
 labsRouter.get('/', labController.getAll);
-labsRouter.get('/filter', labController.filter);
+labsRouter.post('/filter', labController.filter);
 
 export default labsRouter;

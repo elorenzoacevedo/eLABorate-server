@@ -15,7 +15,7 @@ usersRouter.delete('/delete/:id', userController.remove);
 
 //Read
 usersRouter.get('/', userController.getAll);
-usersRouter.get('/filter', userController.filter);
+usersRouter.post('/filter', userController.filter);
 usersRouter.post('/login', userController.login);
 
 export default usersRouter;
